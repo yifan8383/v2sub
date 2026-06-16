@@ -92,7 +92,7 @@ subSecret.get('/get', async (req, res) => {
     return res.status(200).json({ secret })
 })
 
-subSecret.get('/set', async (req, res) => {
+subSecret.post('/set', async (req, res) => {
     const { secret } = req.body
     if (typeof secret !== 'string' || secret === '') {
         return res.status(400).send('请求错误')

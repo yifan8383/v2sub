@@ -19,6 +19,10 @@ const sourceData = reactive({
     exclude: ''
 })
 
+const subSecretData = reactive({
+    secret: ''
+})
+
 const doLogout = async () => {
     try {
         loading.value = true
@@ -111,7 +115,34 @@ const closeEditor = () => {
     showEditor.value = false
 }
 
-onMounted(fetchSubNames)
+const fetchSubSecret = async () => {
+    try {
+        loading.value = true
+        const res = await axios.get('/api/sub/secret/get')
+        Object.assign(subSecretData, res.data)
+    } catch (error) {
+        ElMessage.error(error.response.data)
+    } finally {
+        loading.value = false
+    }
+}
+
+const setSubSecret = async () => {
+    try {
+        loading.value = true
+        const res = await axios.post('/api/sub/secret/set', subSecretData)
+        ElMessage.success(res.data)
+    } catch (error) {
+        ElMessage.error(error.response.data)
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(() => {
+    fetchSubNames()
+    fetchSubSecret()
+})
 </script>
 
 <template>
@@ -139,6 +170,12 @@ onMounted(fetchSubNames)
             </template>
         </el-table>
         <SourceEditor :show="showEditor" :data="sourceData" :loading="loading" @close="closeEditor" @save="saveSource" />
+        <div class="sub-secret-container flex-center">
+            <span>订阅密钥</span>
+            <el-input class="flex-1" v-model="subSecretData.secret" />
+            <el-button type="primary" :loading="loading" @click="fetchSubSecret">获取</el-button>
+            <el-button type="primary" :loading="loading" @click="setSubSecret">设置</el-button>
+        </div>
     </div>
 </template>
 
@@ -148,6 +185,14 @@ onMounted(fetchSubNames)
 }
 
 .el-table {
-    margin-top: 10px;
+    margin: 10px 0;
+}
+
+.sub-secret-container {
+    column-gap: 5px;
+}
+
+.sub-secret-container .el-button {
+    margin: 0;
 }
 </style>
