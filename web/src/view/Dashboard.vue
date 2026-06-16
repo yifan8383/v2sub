@@ -37,6 +37,12 @@ const fetchSubNames = async () => {
     }
 }
 
+const addSource = async () => {}
+
+const editSource = async idx => {}
+
+const deleteSource = async idx => {}
+
 onMounted(fetchSubNames)
 </script>
 
@@ -44,11 +50,11 @@ onMounted(fetchSubNames)
     <div class="container">
         <div class="flex-center">
             <el-button type="primary" :loading="loading" @click="fetchSubNames" :icon="Refresh" />
-            <el-button type="primary" :loading="loading" :icon="Plus" />
+            <el-button type="primary" :loading="loading" @click="addSource" :icon="Plus" />
             <div class="flex-1"></div>
             <el-button type="warning" :loading="loading" @click="doLogout" :icon="DArrowRight" />
         </div>
-        <el-table border :data="subNames">
+        <el-table v-loading="loading" border :data="subNames">
             <el-table-column label="名称" width="auto">
                 <template #default="scope">
                     <span>{{ scope.row }}</span>
@@ -56,8 +62,8 @@ onMounted(fetchSubNames)
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">
-                    <el-button link type="primary">编辑</el-button>
-                    <el-button link type="danger">删除</el-button>
+                    <el-button link type="primary" @click="editSource(scope.$index)">编辑</el-button>
+                    <el-button link type="danger" @click="deleteSource(scope.$index)">删除</el-button>
                 </template>
             </el-table-column>
             <template #empty>
