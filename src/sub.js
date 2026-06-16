@@ -55,13 +55,13 @@ const processItem = async (name, url, exclude) => {
 }
 
 sub.get('/get', async (req, res) => {
-    const subSecret = await env.data.get('sub_secret')
-    if (!subSecret) {
+    const trueSecret = await env.data.get('sub_secret')
+    if (typeof trueSecret !== 'string' || trueSecret === '') {
         return res.status(500).send('订阅密钥未指定')
     }
 
     const { secret } = req.query
-    if (secret !== subSecret) {
+    if (secret !== trueSecret) {
         return res.status(403).send('密钥错误')
     }
 
@@ -87,8 +87,19 @@ sub.use('/secret', subSecret)
 import { needauth } from './auth.js'
 subSecret.use(needauth)
 
-subSecret.get('/get', async (req, res) => {})
+subSecret.get('/get', async (req, res) => {
+    const secret = (await env.data.get('sub_secret')) || ''
+    return res.status(200).json({ secret })
+})
 
-subSecret.get('/set', async (req, res) => {})
+subSecret.get('/set', async (req, res) => {
+    const { secret } = req.body
+    if (typeof secret !== 'string' || secret === '') {
+        return res.status(400).send('请求错误')
+    }
+
+    await env.data.put('sub_secret', secret)
+    return res.status(200).send('操作成功')
+})
 
 export default sub
