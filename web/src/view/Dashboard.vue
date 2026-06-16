@@ -4,12 +4,20 @@ document.title = '管理面板'
 import { Refresh, Plus, DArrowRight } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import SourceEditor from '@/components/SourceEditor.vue'
 
 const loading = ref(false)
+const showEditor = ref(false)
 const subNames = ref([])
 const router = useRouter()
+
+const sourceData = reactive({
+    name: '',
+    url: '',
+    exclude: ''
+})
 
 const doLogout = async () => {
     try {
@@ -43,6 +51,8 @@ const editSource = async idx => {}
 
 const deleteSource = async idx => {}
 
+const saveSource = async () => {}
+
 onMounted(fetchSubNames)
 </script>
 
@@ -70,6 +80,7 @@ onMounted(fetchSubNames)
                 <span>没有数据</span>
             </template>
         </el-table>
+        <SourceEditor :show="showEditor" :data="sourceData" :loading="loading" @cancel="showEditor = false" @save="saveSource" />
     </div>
 </template>
 

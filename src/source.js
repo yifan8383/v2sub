@@ -13,4 +13,14 @@ source.get('/list', async (req, res) => {
     return res.status(200).json(subNames)
 })
 
+source.post('/add', async (req, res) => {
+    const { name, url, exclude } = req.body
+    if (typeof name !== 'string' || name === '' || typeof url !== 'string' || url === '' || typeof exclude !== 'string') {
+        return res.status(400).send('请求错误')
+    }
+
+    await env.data.put(name, JSON.stringify({ url, exclude }))
+    return res.status(200).send('操作成功')
+})
+
 export default source
