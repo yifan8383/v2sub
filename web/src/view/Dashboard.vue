@@ -1,5 +1,15 @@
-<script setup></script>
+<script setup>
+document.title = '管理面板'
+</script>
 
-<template></template>
+<template>
+    <div class="flex-center">
+        <div class="container">dashboard</div>
+    </div>
+</template>
 
-<style scoped></style>
+<style scoped>
+.container {
+    width: 90%;
+}
+</style>
