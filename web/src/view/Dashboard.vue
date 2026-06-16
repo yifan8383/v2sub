@@ -48,11 +48,29 @@ onMounted(fetchSubNames)
             <div class="flex-1"></div>
             <el-button type="warning" :loading="loading" @click="doLogout" :icon="DArrowRight" />
         </div>
+        <el-table border :data="subNames">
+            <el-table-column label="名称" width="auto">
+                <template #default="scope">
+                    <span>{{ scope.row }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="120">
+                <el-button link type="primary">编辑</el-button>
+                <el-button link type="danger">删除</el-button>
+            </el-table-column>
+            <template #empty>
+                <span>没有数据</span>
+            </template>
+        </el-table>
     </div>
 </template>
 
 <style scoped>
 .container {
     padding: 20px;
+}
+
+.el-table {
+    margin-top: 10px;
 }
 </style>
