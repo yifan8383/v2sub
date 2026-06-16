@@ -9,7 +9,7 @@ const env = getenv()
 
 source.get('/list', async (req, res) => {
     const keys = (await env.data.list()).keys
-    const subNames = keys.map(item => item.name)
+    const subNames = keys.map(item => item.name).filter(item => item !== 'sub_secret')
     return res.status(200).json(subNames)
 })
 
