@@ -25,6 +25,7 @@ const env = getenv()
 api.use((req, res, next) => {
     if (typeof env.password !== 'string' || env.password === '') return res.status(500).send('密码配置错误')
     if (typeof env.jwt_secret !== 'string' || env.jwt_secret === '') return res.status(500).send('加密密钥配置错误')
+    if (typeof env.sub_secret !== 'string' || env.sub_secret === '') return res.status(500).send('订阅密钥配置错误')
     if (typeof env.data === 'undefined') return res.status(500).send('存储未绑定')
     return next()
 })
@@ -38,6 +39,9 @@ api.use('/auth', auth)
 
 import source from './source.js'
 api.use('/source', source)
+
+import sub from './sub.js'
+api.use('/sub', sub)
 
 import { createServer, get } from 'node:http'
 import { httpServerHandler } from 'cloudflare:node'
