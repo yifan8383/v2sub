@@ -55,8 +55,10 @@ onMounted(fetchSubNames)
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
-                <el-button link type="primary">编辑</el-button>
-                <el-button link type="danger">删除</el-button>
+                <template #default="scope">
+                    <el-button link type="primary">编辑</el-button>
+                    <el-button link type="danger">删除</el-button>
+                </template>
             </el-table-column>
             <template #empty>
                 <span>没有数据</span>
