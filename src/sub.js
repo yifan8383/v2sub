@@ -55,8 +55,13 @@ const processItem = async (name, url, exclude) => {
 }
 
 sub.get('/get', async (req, res) => {
+    const subSecret = await env.data.get('sub_secret')
+    if (!subSecret) {
+        return res.status(500).send('订阅密钥未指定')
+    }
+
     const { secret } = req.query
-    if (secret !== env.sub_secret) {
+    if (secret !== subSecret) {
         return res.status(403).send('密钥错误')
     }
 
@@ -75,5 +80,15 @@ sub.get('/get', async (req, res) => {
     const result = (await Promise.all(promises)).flat()
     return res.status(200).send(result.join('\n'))
 })
+
+const subSecret = express.Router()
+sub.use('/secret', subSecret)
+
+import { needauth } from './auth.js'
+subSecret.use(needauth)
+
+subSecret.get('/get', async (req, res) => {})
+
+subSecret.get('/set', async (req, res) => {})
 
 export default sub
