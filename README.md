@@ -26,3 +26,9 @@
 
 - 多机场订阅统一管理
 - 一个订阅聚合所有节点
+
+## 订阅链接
+
+```plaintext
+/api/sub/get?secret=<后台设置的 secret>
+```
