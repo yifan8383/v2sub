@@ -4,7 +4,7 @@ document.title = '管理面板'
 import { Refresh, Plus, DArrowRight } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import SourceEditor from '@/components/SourceEditor.vue'
 
@@ -21,6 +21,12 @@ const sourceData = reactive({
 
 const subSecretData = reactive({
     secret: ''
+})
+
+const subUrl = computed(() => {
+    const url = new URL(window.location.href)
+    const { secret } = subSecretData
+    return `${url.protocol}//${url.host}/api/sub/get?secret=${secret}`
 })
 
 const doLogout = async () => {
@@ -146,7 +152,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="main-container">
         <div class="flex-center">
             <el-button type="primary" :loading="loading" @click="fetchSubNames" :icon="Refresh" />
             <el-button type="primary" :loading="loading" @click="addSource" :icon="Plus" />
@@ -170,29 +176,39 @@ onMounted(() => {
             </template>
         </el-table>
         <SourceEditor :show="showEditor" :data="sourceData" :loading="loading" @close="closeEditor" @save="saveSource" />
-        <div class="sub-secret-container flex-center">
+        <div class="container flex-center">
             <span>订阅密钥</span>
             <el-input class="flex-1" v-model="subSecretData.secret" />
             <el-button type="primary" :loading="loading" @click="fetchSubSecret">获取</el-button>
             <el-button type="primary" :loading="loading" @click="setSubSecret">设置</el-button>
         </div>
+        <div class="container flex-center">
+            <el-button type="primary" :loading="loading">读取信息</el-button>
+            <el-button type="primary" :loading="loading">读取内容</el-button>
+            <span class="sub-url flex-1">{{ subUrl }}</span>
+        </div>
     </div>
 </template>
 
 <style scoped>
-.container {
+.main-container {
     padding: 20px;
 }
 
-.el-table {
+.el-table,
+.container {
     margin: 10px 0;
 }
 
-.sub-secret-container {
+.container {
     column-gap: 5px;
 }
 
-.sub-secret-container .el-button {
+.container .el-button {
     margin: 0;
+}
+
+.sub-url {
+    overflow: auto;
 }
 </style>
