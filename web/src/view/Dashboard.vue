@@ -151,7 +151,7 @@ const fetchSubInfo = async () => {
         loading.value = true
         const { secret } = subSecretData
         const res = await axios.get(`/api/sub/info?secret=${secret}`)
-        checkerData.value = JSON.stringify(res.data)
+        checkerData.value = JSON.stringify(res.data, null, 2)
     } catch (error) {
         ElMessage.error(error.response.data)
     } finally {
